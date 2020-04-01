@@ -59,13 +59,21 @@ const followersArray = [];
            https://api.github.com/users/<your name>
 */
 
-const cards = document.querySelector ('.cards')
+//const cards = document.querySelector ('.cards')
 
 axios.get("https://api.github.com/users/Holly919")
-.then(response => {
-  console.log('response', response.data)
-  const newGitCard = gitCard(response.data)
-  cards.appendChild(newGitCard)
+.then(data => {
+  console.log('data:', data)
+  const myInfo = data.data;
+  console.log('UserInfo:', myInfo)
+
+  /* Step 4: Pass the data received from Github into your function, 
+           create a new component and add it to the DOM as a child of .cards
+*/
+
+const cards = document.querySelector('.cards')
+const cardInfo = cardCreator(myInfo)
+cards.appendChild(cardInfo)
   
 })
 
@@ -77,9 +85,7 @@ axios.get("https://api.github.com/users/Holly919")
    Skip to Step 3.
 */
 
-/* Step 4: Pass the data received from Github into your function, 
-           create a new component and add it to the DOM as a child of .cards
-*/
+
 
 /* Step 5: Now that you have your own card getting added to the DOM, either 
           follow this link in your browser https://api.github.com/users/<Your github name>/followers 
@@ -93,15 +99,12 @@ axios.get("https://api.github.com/users/Holly919")
 
 const followersArray = [ 'tetondan','dustinmyers', 'justsml', 'luishrd', 'bigknell',];
 
-
-axios.get("https://api.github.com/users/Holly919/followers")
-.then(response => {
-  console.log(response.data)
-  entryPoint.appendChild(gitHubCard(response.data))
-})
-
-.catch(function(error) {
-  console.log(error)
+followersArray.forEach(user => {
+  axios.get(`https://api.github.com/users/${user}`")
+.then(data => {
+  const card = cardCreator(data.data)
+  const cards = document.querySelector('.cards')
+  cards.appendChild(card)
 })
 
 
@@ -129,7 +132,7 @@ axios.get("https://api.github.com/users/Holly919/followers")
 
 function createCard(obj){
 
-    card = document.createElement("div"),
+    const card = document.createElement("div"),
     cardImg = document.createElement("img"),
     cardInfo = document.createElement("div"),
     cardName = document.createElement("h3"),
@@ -153,7 +156,7 @@ function createCard(obj){
     cardInfo.appendChild(cardBio)
 
     cardImg.src = data.avatar_url
-    cardName.textContent = data.name 
+    cardName.textContent = obj.name 
     cardLocation.textContent = card.html_url
     cardLocation.href = card.html.url
     cardProfile.textContent = 'Profile:'
@@ -167,8 +170,19 @@ function createCard(obj){
     cardName.classList.add("name");
     cardUsername.classList.add("username");
 
-  return cards;
+  return card;
 }
+
+// const accordion = document.querySelector('.accordion')
+
+// // accordion.appendChild(createPanel('Testing', 'We are testing our panel'))
+
+// panelData.map(data => {
+//   console.log('creating panel', data.title)
+//   accordion.appendChild(createPanel(data.title, data.content))
+// })
+
+
 
 
 
